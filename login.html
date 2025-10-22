@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập Quản trị - GameAcc Shop</title>
+    <style>
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #16213e);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 16px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+            font-size: 16px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert-success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+        
+        .alert-danger {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .user-list {
+            margin-top: 20px;
+        }
+        
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-role {
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .role-owner {
+            background: rgba(106, 17, 203, 0.3);
+            color: #c792ea;
+        }
+        
+        .role-admin {
+            background: rgba(37, 117, 252, 0.3);
+            color: #82aaff;
+        }
+        
+        .role-ctv {
+            background: rgba(255, 193, 7, 0.3);
+            color: #ffcb6b;
+        }
+        
+        .role-investor {
+            background: rgba(40, 167, 69, 0.3);
+            color: #c3e88d;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back-link a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">GameAcc Shop - Đăng nhập</div>
+        
+        <div class="card">
+            <div class="tabs">
+                <div class="tab active" data-tab="login">Đăng nhập</div>
+                <div class="tab" data-tab="users">Quản lý User</div>
+                <div class="tab" data-tab="security">Bảo mật</div>
+            </div>
+            
+            <!-- Login Tab -->
+            <div id="login" class="tab-content active">
+                <div class="alert alert-success" id="loginSuccess">Đăng nhập thành công!</div>
+                <div class="alert alert-danger" id="loginError">Sai tên đăng nhập hoặc mật khẩu!</div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Tên đăng nhập</label>
+                        <input type="text" class="form-control" id="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                </form>
+                
+                <div class="back-link">
+                    <a href="index.html">← Quay lại cửa hàng</a>
+                </div>
+            </div>
+            
+            <!-- Users Tab -->
+            <div id="users" class="tab-content">
+                <h3 style="margin-bottom: 15px;">Quản lý người dùng</h3>
+                
+                <form id="addUserForm">
+                    <div class="form-group">
+                        <label for="newUsername">Tên đăng nhập</label>
+                        <input type="text" class="form-control" id="newUsername" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newPassword">Mật khẩu</label>
+                        <input type="password" class="form-control" id="newPassword" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userRole">Vai trò</label>
+                        <select class="form-control" id="userRole" required>
+                            <option value="admin">Admin</option>
+                            <option value="ctv">Cộng tác viên</option>
+                            <option value="investor">Nhà đầu tư</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Thêm người dùng</button>
+                </form>
+                
+                <div class="user-list">
+                    <div class="user-item">
+                        <div class="user-info">
+                            <strong>owner</strong>
+                            <span class="user-role role-owner">Owner</span>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger" style="padding: 5px 10px; font-size: 14px;" disabled>Không thể xóa</button>
+                        </div>
+                    </div>
+                    <div class="user-item">
+                        <div class="user-info">
+                            <strong>admin1</strong>
+                            <span class="user-role role-admin">Admin</span>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger" style="padding: 5px 10px; font-size: 14px;">Xóa</button>
+                        </div>
+                    </div>
+                    <div class="user-item">
+                        <div class="user-info">
+                            <strong>ctv1</strong>
+                            <span class="user-role role-ctv">CTV</span>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger" style="padding: 5px 10px; font-size: 14px;">Xóa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Security Tab -->
+            <div id="security" class="tab-content">
+                <h3 style="margin-bottom: 15px;">Cài đặt bảo mật</h3>
+                
+                <div class="alert alert-success" id="securitySuccess">Cập nhật thành công!</div>
+                
+                <form id="securityForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Mật khẩu hiện tại</label>
+                        <input type="password" class="form-control" id="currentPassword" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newSecurityPassword">Mật khẩu mới</label>
+                        <input type="password" class="form-control" id="newSecurityPassword" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Xác nhận mật khẩu mới</label>
+                        <input type="password" class="form-control" id="confirmPassword" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="withdrawCode">Mã rút tiền (chỉ Owner)</label>
+                        <input type="password" class="form-control" id="withdrawCode" placeholder="Nhập mã mới (nếu muốn thay đổi)">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Cập nhật bảo mật</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Deactivate all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Activate current tab and content
+                this.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple authentication for demo
+            const users = {
+                'owner': 'owner123',
+                'admin1': 'admin123',
+                'ctv1': 'ctv123'
+            };
+            
+            if (users[username] && users[username] === password) {
+                document.getElementById('loginSuccess').style.display = 'block';
+                document.getElementById('loginError').style.display = 'none';
+                
+                // Redirect to admin page after successful login
+                setTimeout(() => {
+                    window.location.href = 'admin.html';
+                }, 1000);
+            } else {
+                document.getElementById('loginSuccess').style.display = 'none';
+                document.getElementById('loginError').style.display = 'block';
+            }
+        });
+
+        // Add user form
+        document.getElementById('addUserForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Người dùng đã được thêm thành công!');
+            this.reset();
+        });
+
+        // Security form
+        document.getElementById('securityForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('securitySuccess').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('securitySuccess').style.display = 'none';
+            }, 3000);
+            this.reset();
+        });
+
+        // Delete user buttons
+        document.querySelectorAll('.user-list .btn-danger').forEach(button => {
+            button.addEventListener('click', function() {
+                if (!this.disabled) {
+                    if (confirm('Bạn có chắc chắn muốn xóa người dùng này?')) {
+                        this.closest('.user-item').remove();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
